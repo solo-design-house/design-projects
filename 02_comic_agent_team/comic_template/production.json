@@ -1,5 +1,6 @@
 {
   "title": "",
+  "branch": "",
   "format": "4x4",
   "stage": "S0",
   "stages": {
@@ -31,5 +32,6 @@
     "p15": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
     "p16": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null}
   },
+  "relays": [],
   "log": []
 }

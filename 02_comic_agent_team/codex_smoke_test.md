@@ -1,3 +1,6 @@
+> **기록용 문서.** 이 테스트의 `codex exec` 방식은 클라우드에서 인증 문제로 실패했고, 세션 이미지 도구로 직접 그리는 방식으로 바뀌었다.
+> 결과는 `codex-smoke-test` 브랜치의 `02_comic_agent_team/codex_test/result/`에 있다. 현재 운영 방식은 README 13절.
+
 # Codex 작화 담당 확인 테스트
 
 `codex_test/jobs/`의 지시서 4개를 실제 절차(`roles/04_artist.md`)대로 처리해 보고, 결과를 `work/_codex_test/SMOKE_RESULT.md`에 기록한다.
