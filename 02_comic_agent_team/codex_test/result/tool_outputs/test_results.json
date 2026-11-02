@@ -1,0 +1,70 @@
+[
+  {
+    "job": "t1_gen",
+    "elapsed_seconds": 28.522,
+    "files": [
+      "panels/t1_gen_v1.png"
+    ],
+    "last_output": "DONE: panels/t1_gen_v1.png",
+    "requested_aspect": "square",
+    "actual_size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "job": "t2_ref",
+    "elapsed_seconds": 34.47,
+    "files": [
+      "panels/t2_ref_v1.png"
+    ],
+    "last_output": "DONE: panels/t2_ref_v1.png",
+    "requested_aspect": "square",
+    "actual_size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "job": "t3_edit",
+    "elapsed_seconds": 28.944,
+    "files": [
+      "panels/t3_edit_v1.png"
+    ],
+    "last_output": "DONE: panels/t3_edit_v1.png",
+    "requested_aspect": "square",
+    "actual_size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "job": "t4_multi",
+    "elapsed_seconds": 136.857,
+    "files": [
+      "bible/t4_multi_v1_c1.png",
+      "bible/t4_multi_v1_c2.png"
+    ],
+    "last_output": "DONE: bible/t4_multi_v1_c1.png bible/t4_multi_v1_c2.png",
+    "requested_aspect": "landscape",
+    "actual_size": [
+      1536,
+      1024
+    ]
+  },
+  {
+    "job": "T5",
+    "elapsed_seconds": 1.226799986397964e-05,
+    "last_output": "FAILED: output exists",
+    "image_generation_calls": 0,
+    "sha256_before": {
+      "panels/t1_gen_v1.png": "21466c0bd5cf6cdae55237d57533827260908a565d2a11feb9610f5fd9d152e6",
+      "panels/t1_gen_v1.meta.json": "275d83f2fe1b5b8614f96cfa3c1f400452991f6ad6a4f0920c57bc897f2a7455"
+    },
+    "sha256_after": {
+      "panels/t1_gen_v1.png": "21466c0bd5cf6cdae55237d57533827260908a565d2a11feb9610f5fd9d152e6",
+      "panels/t1_gen_v1.meta.json": "275d83f2fe1b5b8614f96cfa3c1f400452991f6ad6a4f0920c57bc897f2a7455"
+    },
+    "output_and_meta_unchanged": true
+  }
+]

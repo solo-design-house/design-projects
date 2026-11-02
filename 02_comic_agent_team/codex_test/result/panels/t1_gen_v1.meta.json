@@ -1,12 +1,14 @@
 {
   "id": "t1_gen_v1",
   "artist": "A",
-  "status": "failed",
-  "files": [],
-  "final_prompt": "",
+  "status": "done",
+  "files": [
+    "panels/t1_gen_v1.png"
+  ],
+  "final_prompt": "Manga style panel, clean black ink lines, simple flat colors. A young woman with a short black bob haircut, round glasses, yellow raincoat, standing at a bus stop on a rainy street, medium shot, eye level. Leave top-right 30% completely empty background, no objects. No text, no letters, no speech bubbles, no sound effects, no watermark.",
   "attached_images": [],
   "regenerated_for_text": false,
-  "attempts": 0,
-  "error": "CLI failed before the artist agent started: HTTP 401 Unauthorized (Could not parse your authentication token); access token refresh failed. No image generation request was sent. Failure metadata recorded by the smoke-test caller.",
-  "finished_at": "2026-11-02T06:24:20+00:00"
+  "attempts": 1,
+  "error": null,
+  "finished_at": "2026-11-02T06:37:02+00:00"
 }

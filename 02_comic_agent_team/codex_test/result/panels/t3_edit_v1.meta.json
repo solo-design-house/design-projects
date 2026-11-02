@@ -1,0 +1,16 @@
+{
+  "id": "t3_edit_v1",
+  "artist": "A",
+  "status": "done",
+  "files": [
+    "panels/t3_edit_v1.png"
+  ],
+  "final_prompt": "Edit the attached image panels/t2_ref_v1.png. Keep everything identical except: Change only her facial expression to surprised, with eyes wide open and mouth slightly open. No text, no letters, no speech bubbles, no sound effects, no watermark.",
+  "attached_images": [
+    "panels/t2_ref_v1.png"
+  ],
+  "regenerated_for_text": false,
+  "attempts": 1,
+  "error": null,
+  "finished_at": "2026-11-02T06:37:02+00:00"
+}

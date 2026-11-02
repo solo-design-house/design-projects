@@ -1,0 +1,17 @@
+{
+  "id": "t4_multi_v1",
+  "artist": "B",
+  "status": "done",
+  "files": [
+    "bible/t4_multi_v1_c1.png",
+    "bible/t4_multi_v1_c2.png"
+  ],
+  "final_prompt": "Character reference sheet of the woman in the reference image, same art style: front view, side view, back view, and four facial expressions (neutral, happy, angry, surprised), plain white background. No text, no letters, no speech bubbles, no sound effects, no watermark.",
+  "attached_images": [
+    "panels/t1_gen_v1.png"
+  ],
+  "regenerated_for_text": false,
+  "attempts": 2,
+  "error": null,
+  "finished_at": "2026-11-02T06:37:02+00:00"
+}
