@@ -16,7 +16,7 @@
 ## Codespace에서 확인할 것 (처음 1회)
 - [ ] `codex login` 후 `codex_smoke_test.md` 테스트 통과 (`codex exec`에서 이미지 생성이 되는지는 아직 미검증)
 - [ ] 나눔스퀘어라운드 설치 여부 (없으면 나눔고딕 Bold로 대체됨)
-- [ ] 권한 확인 창이 너무 자주 뜨면 허용 규칙 추가 (README 13절 아래 "권한")
+- [x] 권한 허용 파일 — `.claude/settings.json` (새로 묻는 명령은 `/permissions`로 추가)
 
 ## 다음
 1. Codespace에서 Codex 테스트

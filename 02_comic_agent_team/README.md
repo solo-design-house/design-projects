@@ -321,7 +321,7 @@ cd 02_comic_agent_team && claude
 세부 규격은 `roles/05_letterer.md`.
 
 ### 권한
-Claude Code는 처음 보는 명령마다 실행 허락을 묻는다. 자동 모드에서 중간에 멈추지 않게 하려면 Codespace에서 `/permissions`로 아래를 허용 목록에 추가한다 (또는 `02_comic_agent_team/.claude/settings.json`에 직접 작성).
+Claude Code는 처음 보는 명령마다 실행 허락을 묻는다. 자동 모드에서 중간에 멈추지 않도록 `02_comic_agent_team/.claude/settings.json`에 아래 허용 규칙이 들어 있다 (그 밖에 `codex` 상태 확인, `work/` 안 복사). 새로 묻는 명령이 생기면 `/permissions`로 추가한다.
 ```
 Bash(scripts/new_comic.sh:*)
 Bash(scripts/validate_jobs.py:*)

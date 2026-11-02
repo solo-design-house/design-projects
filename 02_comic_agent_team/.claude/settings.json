@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(scripts/new_comic.sh:*)",
+      "Bash(scripts/validate_jobs.py:*)",
+      "Bash(scripts/run_artist.sh:*)",
+      "Bash(scripts/letter.py:*)",
+      "Bash(codex --version)",
+      "Bash(codex login status)",
+      "Bash(cp work/:*)",
+      "Read(work/**)",
+      "Edit(work/**)",
+      "Write(work/**)"
+    ]
+  }
+}
