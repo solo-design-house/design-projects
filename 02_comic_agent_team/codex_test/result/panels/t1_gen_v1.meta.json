@@ -1,0 +1,12 @@
+{
+  "id": "t1_gen_v1",
+  "artist": "A",
+  "status": "failed",
+  "files": [],
+  "final_prompt": "",
+  "attached_images": [],
+  "regenerated_for_text": false,
+  "attempts": 0,
+  "error": "CLI failed before the artist agent started: HTTP 401 Unauthorized (Could not parse your authentication token); access token refresh failed. No image generation request was sent. Failure metadata recorded by the smoke-test caller.",
+  "finished_at": "2026-11-02T06:24:20+00:00"
+}
