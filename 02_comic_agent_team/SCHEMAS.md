@@ -29,12 +29,12 @@
 | `shot` | ✓ | 샷 크기, 앵글 |
 | `characters` | ✓ | `[{"id", "pos": "left/center/right", "expression", "pose"}]` |
 | `background` | ✓ | `bible/bg_*.png` 파일명 |
-| `dialogue` | ✓ | `[{"speaker", "text", "bubble": "normal/shout/thought", "position"}]` (없으면 빈 배열) |
+| `dialogue` | ✓ | `[{"speaker", "text", "bubble": "normal/shout/thought", "position"}]` (없으면 빈 배열). `position`은 컷 안 위치(`top-left` 등) 또는 `gutter-above` / `gutter-below` |
 | `sfx` | | `[{"text", "position"}]` |
-| `empty_area` | ✓ | 말풍선 자리. 예: `top-right 30%` |
+| `empty_area` | ✓ | 컷 안 말풍선 자리. 예: `top-right 30%`. 여백만 쓰면 `none` |
 | `mode` | ✓ | `generate` / `edit_prev` |
 | `references` | ✓ | 참조 이미지 경로 배열 |
-| `aspect` | ✓ | `square` / `portrait` / `landscape` |
+| `aspect` | ✓ | 세로 스크롤 기본 `landscape`, 강조 컷만 `portrait` |
 | `prompt` | ✓ | 최종 이미지 프롬프트 (영어) |
 
 ## review/*.json — 검수자

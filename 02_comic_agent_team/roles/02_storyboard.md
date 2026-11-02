@@ -11,7 +11,9 @@
    - `characters`: 위치, 표정, 포즈
    - `background`: 배경 기준 파일
    - `dialogue`: 대사와 말풍선 위치
-   - `empty_area`: 말풍선 자리로 비워 둘 영역
+   - `aspect`: 세로 스크롤 기본은 `landscape`(가로 3:2). 인물 전신·높이감·긴장감을 강조할 컷만 `portrait`. `square`는 쓰지 않는다
+   - `dialogue[].position`: 컷 안이면 `top-left` 같은 위치, 컷 위·아래 여백에 놓으려면 `gutter-above` / `gutter-below`
+   - `empty_area`: 컷 안에 말풍선을 넣을 때만 비워 둘 영역. 대사를 모두 여백에 놓는 컷은 `none`
    - `mode`: 장면 첫 컷이면 `generate`, 같은 장면의 연속 컷이면 `edit_prev`
    - `references`: 참조 이미지 목록. `generate`이면 그림체 기준 + 캐릭터 시트 + 배경 기준, `edit_prev`이면 직전 컷 + 캐릭터 시트
    - `prompt`: 완성된 이미지 프롬프트
