@@ -1,6 +1,6 @@
 {
   "title": "",
-  "branch": "",
+  "mode": "auto",
   "format": "vertical_scroll",
   "stage": "S0",
   "stages": {
@@ -32,6 +32,6 @@
     "p15": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
     "p16": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null}
   },
-  "relays": [],
+  "artist_runs": [],
   "log": []
 }

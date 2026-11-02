@@ -7,15 +7,15 @@
 
 | 필드 | 값 |
 |---|---|
-| `branch` | 작품 브랜치 `comic/<작품명>` |
+| `mode` | `auto` / `confirm` |
 | `stage` | 현재 단계 `S0`–`S6` |
 | `stages.<단계>.status` | `todo` / `in_progress` / `review` / `done` |
 | `scenes[]` | `{"id": "s1", "place": "bg_cafe", "panels": ["p01","p02"], "artist": "A"}` |
-| `panels.<pNN>.status` | `todo` → `job_written` → `generated` → `reviewing` → `passed` → `lettered` (불합격 시 `job_written`으로) |
+| `panels.<pNN>.status` | `todo` → `job_written` → `generated` → `reviewing` → `passed` / `passed_with_issues` → `lettered` (불합격 시 `job_written`으로) |
 | `panels.<pNN>.version` | 마지막으로 낸 지시서 버전 |
 | `panels.<pNN>.fails` | 연속성 검수 불합격 횟수. 2가 되면 팀장 판단 |
 | `panels.<pNN>.passed_file` | 잠긴 최종 파일 경로 |
-| `relays[]` | Codex 전달 기록 `{"id": "r3", "jobs": ["p05_v1","p06_v1"], "sent_at": "...", "result_commit": null}` |
+| `artist_runs[]` | 작화 실행 기록 `{"ids": ["p05_v1","p06_v1"], "at": "...", "result": "2 done / 0 failed"}` |
 | `log[]` | `{"at": "...", "who": "...", "event": "..."}` |
 
 ## storyboard.json — 콘티 작가

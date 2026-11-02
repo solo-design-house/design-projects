@@ -2,7 +2,7 @@
 
 Claude는 이미지를 직접 만들지 못하므로 **이미지 생성은 Codex 작화 담당**이 맡는다.
 나머지 직원은 Claude 에이전트다. 직원끼리는 대화하지 않고 **작품 브랜치의 파일**로만 일을 주고받는다.
-Claude와 Codex는 서로 다른 클라우드 세션이므로, 사용자가 둘 사이에 짧은 메시지를 전달한다 (13절).
+GitHub Codespace 하나에서 Claude Code(팀장)가 하위 에이전트와 Codex CLI를 직접 호출하므로, **주제만 주면 사람 개입 없이 끝까지 만든다** (13절).
 
 ---
 
@@ -128,7 +128,7 @@ work/<작품명>/              # comic_template/을 복사해서 시작 (git 제
 ## 7. 운영 시 주의점
 
 - **팀장 한 세션에 이미지를 다 쌓지 않는다.** 검수는 하위 에이전트(검수자)가 이미지를 열어 보고 JSON 결과만 팀장에게 돌려준다.
-- 작화 담당은 사용자가 "처리해"를 전달하면 작품 브랜치의 지시서 묶음을 처리하고 결과를 push한다 (13절).
+- 작화 담당은 팀장이 `scripts/run_artist.sh`로 지시서 1건당 `codex exec` 1회씩 실행한다 (13절).
 - 검수자는 이미지를 **보기만** 하고 `review/`에만 쓴다.
 - 작화 지시서에는 캐릭터 시트와 직전 컷을 참조 이미지로 넣는다.
 - 대사는 이미지 모델에 넣지 않는다. 한글이 깨지고 고칠 수도 없다.
@@ -143,7 +143,7 @@ Codex 작화 담당은 판단하지 않고 지시서대로 그려서 저장만 �
 
 | 직원 | 엔진 | 이유 |
 |---|---|---|
-| 팀장 | **Claude** (Claude Code 세션) | 지시서 묶음을 작품 브랜치에 push하고 사용자에게 전달 메시지를 준다. 결과를 받아 다음 단계를 정한다. 나머지 Claude 직원은 이 세션의 하위 에이전트 |
+| 팀장 | **Claude** (Claude Code 메인 세션) | 단계를 진행하고 `scripts/run_artist.sh`로 Codex 작화를 실행한다. 나머지 Claude 직원은 이 세션의 하위 에이전트 |
 | 시나리오 작가 | **Claude** | 글쓰기, 한국어 대사 |
 | 콘티 작가 (+프롬프트 작성) | **Claude** | 컷별 구도와 **완성된 이미지 프롬프트**까지 작성해 작화 담당이 판단할 일을 없앤다 |
 | 아트 디렉터 | **Claude** | 스타일 바이블과 캐릭터 고정 문구를 쓰고, 생성된 시트 후보 중 하나를 고른다. 시트 이미지 생성은 작화 A에게 시킨다 |
@@ -249,45 +249,64 @@ todo → job_written → generated → reviewing ─ pass → passed(잠금) →
 
 ## 11. Codex가 읽는 파일
 
-이미지 생성은 Codex 세션의 이미지 도구(`image_gen.imagegen`)로 직접 한다. 새 만화를 시작할 때 팀장이 `comic_template/`을 `work/<작품명>/`으로 복사한다. 아래 `comic/`은 이 작업 폴더를 뜻한다.
+이미지 생성은 `codex exec`로 실행된 Codex의 이미지 생성 도구가 한다. 새 만화를 시작할 때 팀장이 `scripts/new_comic.sh`로 `comic_template/`을 `work/<작품명>/`에 복사한다. 아래 `comic/`은 이 작업 폴더를 뜻한다.
 
 | 파일 | 언제 읽나 | 내용 |
 |---|---|---|
-| `comic/AGENTS.md` | 작업 시작 시 | 운영 방식, 쓰기 가능 경로(`panels/`, `bible/`), 덮어쓰기 금지, git 규칙 |
-| `comic/roles/04_artist.md` | 작업 시작 시 | 묶음 처리 순서, 요청 문장 조립 순서, 오류 처리, 보고 형식 |
+| `comic/AGENTS.md` | 실행 시 자동 | 운영 방식, 쓰기 가능 경로(`panels/`, `bible/`), 덮어쓰기 금지, git 금지 |
+| `comic/roles/04_artist.md` | 실행 명령에서 지정 | 지시서 1건 처리 순서, 요청 문장 조립 순서, 오류 처리 |
 | `comic/jobs/SCHEMA.md` | 지시서 확인 시 | 지시서 필드와 결과 기록 형식 |
 | `comic/jobs/<id>.json` | 처리할 때 | 작업 1건 |
 | 지시서의 `references`, `edit_target` 이미지 | 처리할 때 | 도구에 참조·편집 대상으로 첨부 |
 
 **Codex가 읽지 않는 것**: 저장소의 `roles/` 폴더(Claude 직원용), `script.md`, `storyboard.json`, `review/`. 필요한 내용은 팀장이 지시서에 모두 넣는다.
 
-검증 기록: `codex-smoke-test` 브랜치의 `02_comic_agent_team/codex_test/result/` (1차 `codex exec` 방식 실패, 2차 세션 이미지 도구 방식 성공).
+Codespace에서 처음 쓸 때는 `codex_smoke_test.md`로 확인한다. 이전 검증 기록은 `codex-smoke-test` 브랜치.
 
 ---
 
 ## 12. 준비 현황
 
-에이전트 제작 전 준비 상태와 남은 결정 사항은 `PREP_CHECKLIST.md`, Codex에 전달할 메시지는 `CODEX_PROMPT.md`를 본다.
+준비 상태와 남은 확인 사항은 `PREP_CHECKLIST.md`를 본다.
 
 ---
 
-## 13. 운영 방식: 작품 브랜치 + 사용자 전달
+## 13. 운영 방식: GitHub Codespace 자동 실행
 
 ```
-   Claude 세션 (팀장 + 하위 에이전트 6)          사용자            Codex 세션 (작화 A/B)
-   ─────────────────────────────────          ──────            ───────────────────
-1. 지시서 묶음 작성 → comic/<작품명>에 push
-2. "처리해: ..." 메시지 출력          ──▶  Codex에 붙여넣기  ──▶  pull → 묶음 처리 → 결과 push
-                                                               보고 출력
-3. 보고 붙여넣기 받음                 ◀──  Claude에 붙여넣기 ◀──
-   pull → 검수 → 합격 잠금 / 반려 지시서 묶음 → 1로
+Codespace 터미널
+└─ claude  ← /comic auto <주제>
+   ├─ 하위 에이전트: 시나리오 · 콘티 · 아트디렉터 · 식자 · 연속성검수 · 연출검수   (.claude/agents/)
+   └─ scripts/run_artist.sh → codex exec (지시서 1건씩) → panels/, bible/
+→ 결과: work/<작품명>/final/comic.png
 ```
 
-- **브랜치**: 작품마다 `comic/<작품명>`. 이미지(PNG, 장당 약 2MB)도 이 브랜치에 커밋한다. 1화 약 100MB. 무거워지면 그때 정리한다.
-- **설계 브랜치**(이 문서가 있는 브랜치)에는 작품 이미지를 커밋하지 않는다.
-- **전달 횟수**(16컷 1화 기준, 반려 제외): 그림체 1 + 시트·배경 1 + 장면 4–6 ≈ **6–8번**. 서로 독립된 장면은 한 번에 묶어 줄일 수 있다.
-- **충돌 방지**: Claude는 `jobs/`, `review/`, `production.json` 등만, Codex는 `panels/`, `bible/`의 결과 파일만 커밋한다. 양쪽 모두 push 전에 pull 한다.
+| 구성 요소 | 위치 |
+|---|---|
+| Codespace 설정 (CLI·글꼴 자동 설치) | 저장소 루트 `.devcontainer/devcontainer.json`, `scripts/setup_codespace.sh` |
+| 팀장 지침 | `CLAUDE.md`, `roles/00_director.md` |
+| 시작 명령 | `.claude/commands/comic.md` → `/comic [auto|confirm] <주제>` |
+| 하위 에이전트 6개 | `.claude/agents/comic-*.md` (절차는 `roles/`를 읽어 따름) |
+| 작화 실행 | `scripts/run_artist.sh` (지시서 검사 → `codex exec` → 실패 시 호출자 meta 기록) |
+| 지시서 검사 | `scripts/validate_jobs.py` |
+| 작품 폴더 생성 | `scripts/new_comic.sh <작품명> <auto|confirm>` |
+| 식자·조판 | `scripts/letter.py` |
 
+- **모드**: `auto`는 최종 결과만 보고, `confirm`은 대본·그림체·캐릭터 시트·최종에서 멈춘다.
+- **작품 파일**: `work/`는 git에 올리지 않는다. Codespace 안에 남고, 결과는 `final/`에서 내려받는다.
+- **동시 실행**: 서로 다른 장면은 `run_artist.sh`를 동시에 2개 돌린다 (작화 A·B). 같은 장면은 순서대로.
+
+### 처음 한 번
+1. GitHub 저장소 → Code → Codespaces → 이 브랜치로 Codespace 생성 (설치 자동 진행)
+2. 터미널: `codex login`
+3. 터미널: `cd 02_comic_agent_team && claude` → Claude 로그인
+4. Claude에게: "Codex 테스트 돌려줘" (`codex_smoke_test.md`)
+
+### 매번
+```
+cd 02_comic_agent_team && claude
+/comic auto 비 오는 날 버스 정류장에서 옛 친구를 다시 만나는 잔잔한 이야기
+```
 ---
 
 ## 14. 확정 사항
@@ -297,6 +316,17 @@ todo → job_written → generated → reviewing ─ pass → passed(잠금) →
 | 형식 | **세로 스크롤** (가로폭 800px). 컷은 가로 3:2 기본, 강조 컷만 세로 2:3 |
 | 말풍선 | 컷 안 빈 영역 또는 컷 사이 여백 |
 | 글꼴 (세트 B) | 대사 나눔스퀘어라운드 Bold · 외침 주아 · 속마음 개구 · 효과음 검은고딕 |
-| 이미지 생성 | Codex 세션 이미지 도구, 작품 브랜치 + 사용자 전달 (13절) |
+| 이미지 생성 | Codespace에서 `codex exec`, 팀장이 자동 호출 (13절) |
 
 세부 규격은 `roles/05_letterer.md`.
+
+### 권한
+Claude Code는 처음 보는 명령마다 실행 허락을 묻는다. 자동 모드에서 중간에 멈추지 않게 하려면 Codespace에서 `/permissions`로 아래를 허용 목록에 추가한다 (또는 `02_comic_agent_team/.claude/settings.json`에 직접 작성).
+```
+Bash(scripts/new_comic.sh:*)
+Bash(scripts/validate_jobs.py:*)
+Bash(scripts/run_artist.sh:*)
+Bash(scripts/letter.py:*)
+Edit(work/**)
+Write(work/**)
+```

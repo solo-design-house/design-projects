@@ -1,32 +1,36 @@
-> **기록용 문서.** 이 테스트의 `codex exec` 방식은 클라우드에서 인증 문제로 실패했고, 세션 이미지 도구로 직접 그리는 방식으로 바뀌었다.
-> 결과는 `codex-smoke-test` 브랜치의 `02_comic_agent_team/codex_test/result/`에 있다. 현재 운영 방식은 README 13절.
+# Codex 작화 확인 테스트 (Codespace에서 처음 1회)
 
-# Codex 작화 담당 확인 테스트
-
-`codex_test/jobs/`의 지시서 4개를 실제 절차(`roles/04_artist.md`)대로 처리해 보고, 결과를 `work/_codex_test/SMOKE_RESULT.md`에 기록한다.
+Codespace에서 `codex exec`로 이미지가 실제로 생성되는지 확인한다.
+Claude(팀장)에게 **"Codex 테스트 돌려줘"**라고 하면 아래를 대신 실행하고 결과를 보고한다.
 
 ## 준비
 ```
-mkdir -p work && cp -r comic_template work/_codex_test
-cp codex_test/jobs/*.json work/_codex_test/jobs/
-cd work/_codex_test
+scripts/new_comic.sh codex-test auto
+cp codex_test/jobs/*.json work/codex-test/jobs/
+scripts/validate_jobs.py work/codex-test
 ```
 
-## 테스트 (순서대로, 앞 테스트 결과를 뒤에서 참조함)
+## 실행
+```
+scripts/run_artist.sh work/codex-test t1_gen_v1 t2_ref_v1 t3_edit_v1 t4_multi_v1
+scripts/run_artist.sh work/codex-test t1_gen_v1     # T5: 이미 있으므로 실패해야 정상
+```
 
-| # | 확인할 것 | 명령 |
+## 확인 (Claude가 이미지를 열어 판정)
+| # | 지시서 | 통과 기준 |
 |---|---|---|
-| T1 | `codex exec`에서 이미지가 생성·저장되는가, 기본 저장 위치는 어디인가 | `codex exec "roles/04_artist.md를 따라 jobs/t1_gen.json을 처리하라"` |
-| T2 | `--image` 참조가 반영되는가 (같은 인물로 보이는가) | `codex exec --image panels/t1_gen_v1.png "roles/04_artist.md를 따라 jobs/t2_ref.json을 처리하라"` |
-| T3 | 직전 컷 수정(`edit_prev`)이 표정만 바꾸고 나머지를 유지하는가 | `codex exec --image panels/t2_ref_v1.png "roles/04_artist.md를 따라 jobs/t3_edit.json을 처리하라"` |
-| T4 | 가로 비율, 2장 생성(`n: 2`), `_c1/_c2` 파일명 | `codex exec --image panels/t1_gen_v1.png "roles/04_artist.md를 따라 jobs/t4_multi.json을 처리하라"` |
-| T5 | 덮어쓰기 금지 | T1 명령을 다시 실행 → `FAILED: output exists`가 나와야 함 |
-| T6 | 사용량 | 테스트 후 남은 한도. 1화 ≈ 40–60장이 가능한지 |
+| T1 | `t1_gen_v1` | `panels/t1_gen_v1.png` 생성, 노란 우비·단발·안경, 글자 없음, 오른쪽 위가 비어 있음 |
+| T2 | `t2_ref_v1` | T1과 같은 인물로 보임 (참조 이미지 반영) |
+| T3 | `t3_edit_v1` | T2에서 표정만 바뀌고 나머지 동일 (편집) |
+| T4 | `t4_multi_v1` | `bible/t4_multi_v1_c1.png`, `_c2.png` 2장, 캐릭터 시트 |
+| T5 | `t1_gen_v1` 재실행 | `output 이미 있음`으로 실패, 기존 파일 보존 |
 
-## SMOKE_RESULT.md에 기록할 것
-- Codex CLI 버전 (`codex --version`), 로그인 방식(ChatGPT 요금제 / API 키)
-- 테스트별: 성공 여부, 마지막 줄 출력(`DONE/FAILED`), 걸린 시간, 생성 파일 경로, `meta.json`이 형식대로인지
-- 생성 이미지의 실제 기본 저장 위치
-- 글자·말풍선이 섞여 나왔는지, `keep_empty` 영역이 비었는지
-- 실행에 필요했던 옵션 (샌드박스, 승인 모드, 네트워크 등)
-- `roles/04_artist.md`와 실제 동작이 다른 부분
+## 실패하면
+- `logs/<id>.log`를 본다.
+- 인증 오류(401, 로그인) → 터미널에서 `codex login` 후 다시 실행.
+- 이미지 도구 없음(`FAILED: no image tool`) → Codex CLI 버전 확인(`codex --version`), 최신으로 업데이트(`npm i -g @openai/codex`) 후 재시도.
+- 그래도 안 되면 대안: Claude가 OpenAI 이미지 API를 직접 호출하는 방식 (API 키 필요).
+
+## 참고: 이전 검증 기록
+`codex-smoke-test` 브랜치의 `02_comic_agent_team/codex_test/result/`.
+1차(Codex 클라우드 안에서 `codex exec`)는 클라우드 인증 문제로 실패, 2차(Codex 세션 이미지 도구 직접 사용)는 T1–T5 모두 성공.

@@ -4,7 +4,7 @@
 
 | 필드 | 필수 | 값 | 설명 |
 |---|---|---|---|
-| `id` | ✓ | `p05_v2`, `style_2`, `char_minji_v1`, `bg_cafe_v1` | 파일명과 같게. 처리 순서는 파일명 순이므로 `edit_prev`는 직전 컷보다 뒤 이름이어야 한다 |
+| `id` | ✓ | `p05_v2`, `style_2`, `char_minji_v1`, `bg_cafe_v1` | 파일명과 같게 |
 | `kind` | ✓ | `style` / `sheet` / `bg` / `panel` | `panel`은 `panels/`, 나머지는 `bible/`에 저장 |
 | `artist` | ✓ | `A` / `B` | 담당자 (기록용) |
 | `mode` | ✓ | `generate` / `edit_prev` | |
@@ -14,7 +14,7 @@
 | `aspect` | ✓ | `square` / `portrait` / `landscape` | 도구에 비율 옵션이 없어 요청 문장으로만 전달된다. 실제 비율은 다를 수 있다 |
 | `n` | ✓ | 1–4 | **결과 장수.** 도구를 n번 호출한다. 컷은 1, 그림체·시트·배경 후보는 2–4 |
 | `output` | ✓ | 경로 | 예: `panels/p05_v2.png`, `bible/char_minji_v1.png` |
-| `keep_empty` | | 문자열 | 말풍선 자리. 예: `top-right 30%` |
+| `keep_empty` | | 문자열 | 말풍선 자리. 예: `top-right 30%`. 없거나 `none`이면 생략 |
 | `fix_from_review` | | 문자열 (영어) | 검수에서 온 수정 문구 |
 
 ### 예시

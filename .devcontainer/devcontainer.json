@@ -1,0 +1,10 @@
+{
+  "name": "comic-agent-team",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "22" }
+  },
+  "postCreateCommand": "bash 02_comic_agent_team/scripts/setup_codespace.sh",
+  "postAttachCommand": "echo '만화 팀 실행: cd 02_comic_agent_team && claude   (처음이면 codex login 먼저)'",
+  "hostRequirements": { "cpus": 2 }
+}
