@@ -1,0 +1,3 @@
+{"id":"t1_gen_v1","kind":"panel","artist":"A","mode":"generate",
+ "prompt":"Manga style panel, clean black ink lines, simple flat colors. A young woman with a short black bob haircut, round glasses, yellow raincoat, standing at a bus stop on a rainy street, medium shot, eye level.",
+ "references":[],"aspect":"square","n":1,"output":"panels/t1_gen_v1.png","keep_empty":"top-right 30%"}

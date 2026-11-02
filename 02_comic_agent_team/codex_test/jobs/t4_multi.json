@@ -1,0 +1,3 @@
+{"id":"t4_multi_v1","kind":"sheet","artist":"B","mode":"generate",
+ "prompt":"Character reference sheet of the woman in the reference image, same art style: front view, side view, back view, and four facial expressions (neutral, happy, angry, surprised), plain white background.",
+ "references":["panels/t1_gen_v1.png"],"aspect":"landscape","n":2,"output":"bible/t4_multi_v1.png"}

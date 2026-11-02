@@ -1,0 +1,3 @@
+{"id":"t3_edit_v1","kind":"panel","artist":"A","mode":"edit_prev",
+ "prompt":"Change only her facial expression to surprised, with eyes wide open and mouth slightly open.",
+ "references":[],"edit_target":"panels/t2_ref_v1.png","aspect":"square","n":1,"output":"panels/t3_edit_v1.png"}

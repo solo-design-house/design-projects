@@ -1,0 +1,3 @@
+{"id":"t2_ref_v1","kind":"panel","artist":"A","mode":"generate",
+ "prompt":"Same character as the reference image, same art style, same clothes. She is now sitting on a bench inside the bus, looking out the window, side view, medium close-up.",
+ "references":["panels/t1_gen_v1.png"],"aspect":"square","n":1,"output":"panels/t2_ref_v1.png","keep_empty":"top-left 25%"}

@@ -1,7 +1,8 @@
 # 16컷 만화 제작 Agent 조직도
 
 Claude는 이미지를 직접 만들지 못하므로 **이미지 생성은 Codex CLI 에이전트**가 맡는다.
-각 "직원"은 역할 프롬프트를 가진 `codex exec` 실행 1회(또는 세션 1개)이고,
+나머지 직원은 Claude 에이전트이고, 작화 담당만 `codex exec` 실행 1회로 동작한다.
+모든 직원은
 직원끼리는 대화하지 않고 **공유 폴더의 파일**로만 일을 주고받는다.
 
 ---
@@ -50,7 +51,7 @@ Claude는 이미지를 직접 만들지 못하므로 **이미지 생성은 Codex
 ### 작화 담당을 2명으로 두는 이유
 - 1명이면 16컷을 순서대로 그려 느리다.
 - 4명 이상이면 사람마다 그림체가 벌어지고 API 동시 호출 한도에 걸리기 쉽다.
-- **막 단위(1–8 / 9–16)로 나누면** 같은 장면의 연속 컷을 같은 담당이 그리므로 장면 내 일관성이 유지된다.
+- **장면 단위로 나누면**(대략 앞 절반 A, 뒤 절반 B) 같은 장면의 연속 컷을 같은 담당이 그리므로 장면 내 일관성이 유지된다.
 
 ### 검수자를 2명으로 두는 이유
 한 명에게 "다 봐"라고 시키면 눈에 띄는 것만 보고 넘어간다. **보는 기준을 둘로 나누면** 각자 체크리스트를 끝까지 확인한다.
@@ -65,7 +66,7 @@ Claude는 이미지를 직접 만들지 못하므로 **이미지 생성은 Codex
 [1] 시나리오 ──▶ ◆G1 연출검수 ──▶ [사용자 승인]
 [2] 아트 바이블·캐릭터 시트 ──▶ ◆G2 연속성검수 ──▶ [사용자 승인]   ← 여기서 그림체를 확정해야 뒤가 싸다
 [3] 콘티 16컷 ──▶ ◆G3 연출검수
-[4] 작화 A(1–8) ║ 작화 B(9–16)  병렬
+[4] 작화 A(앞 장면) ║ 작화 B(뒤 장면)  병렬
         └─ 컷마다 ◆G4 연속성검수 ── 불합격 → 사유와 함께 작화 담당에게 반려 (컷당 최대 2회)
 [5] 식자·조판 ──▶ ◆G5 연출검수 + 연속성검수 (페이지 전체)
 [6] 팀장이 최종본과 검수 리포트 제출 ──▶ [사용자 최종 승인]
@@ -81,7 +82,10 @@ Claude는 이미지를 직접 만들지 못하므로 **이미지 생성은 Codex
 ## 5. 공유 폴더 구조
 
 ```
-comic/
+work/<작품명>/              # comic_template/을 복사해서 시작 (git 제외)
+├── AGENTS.md              # Codex 공통 규칙 (Codex가 자동으로 읽음)
+├── roles/04_artist.md     # Codex 작화 절차
+├── jobs/                  # 작화 지시서 (SCHEMA.md에 형식 정의)
 ├── production.json        # 팀장이 관리하는 상태표 (컷별 단계·버전·반려 횟수)
 ├── brief.md               # 사용자 요청
 ├── script.md
@@ -125,7 +129,7 @@ comic/
 ## 7. Codex CLI로 돌릴 때 주의점
 
 - **팀장은 스크립트 + 에이전트로 나눈다.** 순서·병렬 실행·재시도 횟수 같은 기계적 제어는 셸/파이썬 스크립트가 하고, "반려 사유를 보고 누구에게 보낼지" 같은 판단만 팀장 에이전트가 한다. 팀장 한 세션에 16컷 이미지를 다 쌓으면 컨텍스트가 넘친다.
-- 각 직원은 `roles/<역할>.md` 프롬프트를 읽고 `codex exec`로 한 번 실행 후 종료한다. 공통 규칙(폴더 구조, 파일명, 덮어쓰기 금지)은 `AGENTS.md`에 둔다.
+- 작화 담당은 작업 폴더(`work/<작품명>/`)에서 `codex exec`로 지시서 1개를 처리하고 종료한다. Codex가 읽는 파일은 11절 참고.
 - 검수자는 이미지를 **보기만** 하도록 쓰기 권한을 `review/`로 제한한다.
 - 작화 담당 호출 시 캐릭터 시트와 직전 컷을 참조 이미지로 같이 넘긴다.
 - 대사는 이미지 모델에 넣지 않는다. 한글이 깨지고 고칠 수도 없다.
@@ -166,10 +170,10 @@ jobs/p05_v2.json          # Claude(팀장)가 작성
 }
 
 panels/p05_v2.png         # Codex가 생성
-panels/p05_v2.meta.json   # Codex가 기록: 실제 사용한 프롬프트, 참조 이미지, 시드 등
+panels/p05_v2.meta.json   # Codex가 기록: 실제 보낸 요청 문장, 첨부 이미지, 시도 횟수, 오류
 ```
 
-Codex 작화 담당 규칙 (`roles/artist.md`에 넣을 내용):
+Codex 작화 담당 규칙 요약 (전문은 `comic_template/roles/04_artist.md`):
 - 지시서에 없는 것은 그리지 않는다. 프롬프트를 임의로 바꾸지 않는다.
 - 글자, 말풍선, 효과음 금지.
 - 기존 파일을 덮어쓰지 않고 버전 번호를 올린다.
@@ -220,7 +224,7 @@ Codex 작화 담당 규칙 (`roles/artist.md`에 넣을 내용):
 | `roles/01_writer.md` | 시나리오 작가 | Claude |
 | `roles/02_storyboard.md` | 콘티 작가 | Claude |
 | `roles/03_art_director.md` | 아트 디렉터 | Claude |
-| `roles/04_artist.md` | 작화 A / B | Codex |
+| `comic_template/roles/04_artist.md` | 작화 A / B | Codex |
 | `roles/05_letterer.md` | 식자·편집 | Claude |
 | `roles/06_continuity_reviewer.md` | 연속성 검수 | Claude |
 | `roles/07_story_reviewer.md` | 연출·품질 검수 | Claude |
@@ -249,3 +253,34 @@ todo → job_written → generated → reviewing ─ pass → passed(잠금) →
 ```
 
 `edit_prev` 컷은 직전 컷이 `passed`가 된 뒤에만 `job_written`으로 넘어간다.
+
+---
+
+## 11. Codex가 읽는 파일
+
+이미지 생성은 Codex 내장 기능(`gpt-image-2`)을 쓴다. 새 만화를 시작할 때 `comic_template/`을 `work/<작품명>/`으로 복사한다. 아래 `comic/`은 이 작업 폴더를 뜻한다.
+
+| 파일 | 언제 읽나 | 내용 |
+|---|---|---|
+| `comic/AGENTS.md` | 실행 시 자동 | 작화 담당으로만 일하기, 쓰기 가능 경로, 덮어쓰기 금지, `DONE/FAILED` 출력 |
+| `comic/roles/04_artist.md` | 실행 명령에서 지정 | 작화 절차, 요청 문장 조립 순서, 오류 처리, 금지 사항 |
+| `comic/jobs/SCHEMA.md` | 지시서 확인 시 | 지시서 필드와 결과 기록 형식 |
+| `comic/jobs/<id>.json` | 실행 명령에서 지정 | 이번 작업 1건 |
+| `--image`로 첨부된 이미지 | 실행 시 | 지시서의 `references`, `edit_target` |
+
+**Codex가 읽지 않는 것**: `roles/` 폴더(Claude 직원용), `script.md`, `storyboard.json`, `review/`. 필요한 내용은 팀장이 지시서에 모두 넣는다.
+
+실행 예:
+```
+cd work/<작품명>
+codex exec --image bible/style_anchor.png --image bible/char_minji.png --image bible/bg_cafe.png \
+  "roles/04_artist.md를 따라 jobs/p05_v2.json을 처리하라"
+```
+
+처음 쓰기 전에 `codex_smoke_test.md`의 확인 테스트를 1회 돌려 `codex exec`에서 이미지 생성과 참조 첨부가 되는지, 생성 파일이 어디에 저장되는지 확인한다.
+
+---
+
+## 12. 준비 현황
+
+에이전트 제작 전 준비 상태와 남은 결정 사항은 `PREP_CHECKLIST.md`, Codex에 전달할 프롬프트는 `CODEX_PROMPT.md`를 본다.

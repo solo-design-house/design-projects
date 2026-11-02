@@ -1,0 +1,35 @@
+{
+  "title": "",
+  "format": "4x4",
+  "stage": "S0",
+  "stages": {
+    "S1_script":     {"status": "todo", "approved_by_user": false},
+    "S2a_style":     {"status": "todo", "selected": null},
+    "S2b_sheets":    {"status": "todo", "approved_by_user": false},
+    "S2c_bg":        {"status": "todo"},
+    "S3_storyboard": {"status": "todo"},
+    "S4_panels":     {"status": "todo"},
+    "S5_lettering":  {"status": "todo"},
+    "S6_delivery":   {"status": "todo", "approved_by_user": false}
+  },
+  "scenes": [],
+  "panels": {
+    "p01": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p02": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p03": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p04": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p05": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p06": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p07": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p08": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p09": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p10": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p11": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p12": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p13": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p14": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p15": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null},
+    "p16": {"status": "todo", "scene": null, "artist": null, "mode": null, "version": 0, "fails": 0, "passed_file": null}
+  },
+  "log": []
+}
