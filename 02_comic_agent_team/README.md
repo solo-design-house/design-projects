@@ -28,8 +28,8 @@ Claude는 이미지를 직접 만들지 못하므로 **이미지 생성은 Codex
                         └───────┬───────┘
      ┌──────────────┬───────────┼──────────────┬──────────────┐
   [기획팀]        [아트팀]       [작화팀]        [마감팀]        [검수팀]
-  시나리오 작가 1   아트 디렉터 1   작화 A (1~8컷)   식자·편집 1     연속성 검수 1
-  콘티 작가 1                    작화 B (9~16컷)                 연출·품질 검수 1
+  시나리오 작가 1   아트 디렉터 1   작화 A (앞 장면)   식자·편집 1     연속성 검수 1
+  콘티 작가 1                    작화 B (뒤 장면)                 연출·품질 검수 1
 ```
 
 ---
@@ -206,3 +206,46 @@ Codex 작화 담당 규칙 (`roles/artist.md`에 넣을 내용):
 [2c] 배경 기준 (장소 수만큼)
 [3]  콘티: 컷마다 mode(generate / edit_prev)와 참조 이미지 목록 지정
 ```
+
+---
+
+## 10. 직원별 업무 순서
+
+각 직원의 상세 절차는 `roles/` 폴더에 있다. 이 파일을 그대로 각 에이전트의 역할 프롬프트로 쓴다.
+
+| 파일 | 직원 | 엔진 |
+|---|---|---|
+| `roles/_common.md` | 모든 직원 공통 규칙 | — |
+| `roles/00_director.md` | 팀장 | Claude |
+| `roles/01_writer.md` | 시나리오 작가 | Claude |
+| `roles/02_storyboard.md` | 콘티 작가 | Claude |
+| `roles/03_art_director.md` | 아트 디렉터 | Claude |
+| `roles/04_artist.md` | 작화 A / B | Codex |
+| `roles/05_letterer.md` | 식자·편집 | Claude |
+| `roles/06_continuity_reviewer.md` | 연속성 검수 | Claude |
+| `roles/07_story_reviewer.md` | 연출·품질 검수 | Claude |
+
+### 전체 진행표
+
+```
+단계  담당                        산출물                         관문
+S0   팀장                         brief.md, production.json
+S1   시나리오 작가                 script.md                     연출검수 → 사용자 승인
+S2a  아트디렉터 → 작화A            그림체 후보 3–4장               사용자 선택
+S2b  아트디렉터 → 작화A  ┐         캐릭터 시트                    연속성검수 → 사용자 승인
+S2c  아트디렉터 → 작화B  ┘ 동시    배경 기준                      아트디렉터 선택
+S3   콘티 작가                     storyboard.json               연출검수
+S4   작화A ║ 작화B (장면 단위)     panels/                       컷마다 연속성검수 (반려 최대 2회)
+S5   식자·편집                     lettered/, final/             연출검수 + 연속성검수
+S6   팀장                          납품                           사용자 최종 승인
+```
+
+### 컷 하나의 상태 변화 (`production.json`)
+
+```
+todo → job_written → generated → reviewing ─ pass → passed(잠금) → lettered
+                         ▲                   └ fail → job_written(v+1)
+                         └── 2회 실패 시 팀장 판단: 콘티 수정 / 사용자 보고
+```
+
+`edit_prev` 컷은 직전 컷이 `passed`가 된 뒤에만 `job_written`으로 넘어간다.
